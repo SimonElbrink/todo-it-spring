@@ -3,6 +3,7 @@ package se.lexicon.todoitspring.service;
 
 
 import se.lexicon.todoitspring.dto.TodoItemDto;
+import se.lexicon.todoitspring.dto.TodoItemForm;
 
 
 import java.time.LocalDateTime;
@@ -16,8 +17,8 @@ public interface TodoItemService {
     Collection<TodoItemDto> searchByDoneStatus(boolean doneStatus);
     Collection<TodoItemDto> searchByDateBefore(LocalDateTime end);
 
-    TodoItemDto createByForm(TodoItemDto todoItemDto);
-    TodoItemDto update(TodoItemDto todoItemDto);
+    TodoItemDto createByForm(TodoItemForm todoItemForm);
+    TodoItemDto update(TodoItemForm todoItemDto);
 
     void delete(String id);
 

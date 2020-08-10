@@ -2,6 +2,7 @@ package se.lexicon.todoitspring.service;
 
 import se.lexicon.todoitspring.dto.AppUserDto;
 import se.lexicon.todoitspring.dto.TodoItemDto;
+import se.lexicon.todoitspring.dto.TodoItemForm;
 import se.lexicon.todoitspring.entity.AppUser;
 import se.lexicon.todoitspring.entity.TodoItem;
 
@@ -16,6 +17,8 @@ public interface DtoConversionService {
     TodoItem dtoToTodoItem(TodoItemDto dto);
     TodoItemDto todoItemToDto(TodoItem todoItem);
     Collection<TodoItemDto>todoItemToDto(Collection<TodoItem> todoItems);
+
+    TodoItem TodoItemFormToTodoItem(TodoItemForm dto);
 
 
 

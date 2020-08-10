@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import se.lexicon.todoitspring.dto.TodoItemDto;
+import se.lexicon.todoitspring.dto.TodoItemForm;
 import se.lexicon.todoitspring.service.TodoItemService;
 
 import java.util.Collection;
@@ -48,14 +49,14 @@ public class TodoItemController {
     }
 
     @PostMapping
-    public ResponseEntity<TodoItemDto> createByForm(@RequestBody TodoItemDto dto){
+    public ResponseEntity<TodoItemDto> createByForm(@RequestBody TodoItemForm dto){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createByForm(dto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TodoItemDto> updateByForm(@PathVariable String id, @RequestBody TodoItemDto updated){
+    public ResponseEntity<TodoItemDto> updateByForm(@PathVariable String id, @RequestBody TodoItemForm updated){
 
-        if (id != updated.getId()){
+        if (!id.equals(updated.getId())){
             throw new IllegalArgumentException("ID's need to match");
         }
 

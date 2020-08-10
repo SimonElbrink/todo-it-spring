@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import se.lexicon.todoitspring.dto.AppUserDto;
 import se.lexicon.todoitspring.dto.TodoItemDto;
+import se.lexicon.todoitspring.dto.TodoItemForm;
 import se.lexicon.todoitspring.entity.AppUser;
 import se.lexicon.todoitspring.entity.TodoItem;
 import se.lexicon.todoitspring.exception.EntityNotFoundException;
@@ -73,5 +74,10 @@ public class DtoConversionServiceImpl implements DtoConversionService{
         }
 
         return todoItemDtos;
+    }
+
+    @Override
+    public TodoItem TodoItemFormToTodoItem(TodoItemForm dto) {
+        return new TodoItem(dto.getId(), dto.getTitle(), dto.getDescription(), dto.getDeadline(), dto.isDone(), dto.getAssignee() == null ? null : appUserRepository.findById(dto.getAssignee()).orElseThrow(() -> new EntityNotFoundException("Conversion to TodoItem failed: Requested Assignee could not be found")));
     }
 }

@@ -3,8 +3,10 @@ package se.lexicon.todoitspring.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import se.lexicon.todoitspring.dto.TodoItemDto;
+import se.lexicon.todoitspring.dto.TodoItemForm;
 import se.lexicon.todoitspring.entity.TodoItem;
 import se.lexicon.todoitspring.exception.EntityNotFoundException;
+import se.lexicon.todoitspring.repository.AppUserRepository;
 import se.lexicon.todoitspring.repository.TodoItemRepository;
 
 import java.time.LocalDateTime;
@@ -13,24 +15,26 @@ import java.util.Collection;
 @Service
 public class TodoItemServiceImpl implements TodoItemService {
 
-    TodoItemRepository repository;
+    TodoItemRepository todoItemRepository;
     DtoConversionService converter;
+    AppUserRepository appUserRepository;
 
     @Autowired
-    public TodoItemServiceImpl(TodoItemRepository repository, DtoConversionService converter) {
-        this.repository = repository;
+    public TodoItemServiceImpl(TodoItemRepository todoItemRepository, DtoConversionService converter, AppUserRepository appUserRepository) {
+        this.todoItemRepository = todoItemRepository;
         this.converter = converter;
+        this.appUserRepository = appUserRepository;
     }
 
 
     @Override
     public Collection<TodoItemDto> findAll() {
-        return converter.todoItemToDto( (Collection<TodoItem>) repository.findAll());
+        return converter.todoItemToDto( (Collection<TodoItem>) todoItemRepository.findAll());
     }
 
     @Override
     public TodoItemDto findById(String id) {
-        return converter.todoItemToDto(repository.findById(id).get());
+        return converter.todoItemToDto(todoItemRepository.findById(id).get());
     }
 
     @Override
@@ -49,23 +53,24 @@ public class TodoItemServiceImpl implements TodoItemService {
     }
 
     @Override
-    public TodoItemDto createByForm(TodoItemDto todoItemDto) {
+    public TodoItemDto createByForm(TodoItemForm todoItemForm) {
 
-        if (todoItemDto.getId() != null){
+        if (todoItemForm.getId() != null){
             throw new IllegalArgumentException("Invalid TodoItem ID: ID should not be specified at creation.");
         }
-        return converter.todoItemToDto(repository.save(converter.dtoToTodoItem(todoItemDto)));
+        return converter.todoItemToDto(todoItemRepository.save(converter.TodoItemFormToTodoItem(todoItemForm)));
     }
 
     @Override
-    public TodoItemDto update(TodoItemDto todoItemDto) {
-        if (todoItemDto.getId() == null){
-            throw new IllegalArgumentException("TodoItem had a Invalid ID: " + todoItemDto.getId());
+    public TodoItemDto update(TodoItemForm todoItemForm) {
+        if (todoItemForm.getId() == null){
+            throw new IllegalArgumentException("TodoItem had a Invalid ID: " + todoItemForm.getId());
         }
 
-        TodoItem todoItem = repository.findById(todoItemDto.getId()).orElseThrow(() -> new EntityNotFoundException("Could not find TodoItem with ID: " + todoItemDto.getId()));
+        TodoItem todoItem = todoItemRepository.findById(todoItemForm.getId()).orElseThrow(() -> new EntityNotFoundException("Could not find TodoItem with ID: " + todoItemForm.getId()));
 
-        TodoItem updated = converter.dtoToTodoItem(todoItemDto);
+
+        TodoItem updated = converter.TodoItemFormToTodoItem(todoItemForm);
 
         todoItem.setTitle(updated.getTitle());
         todoItem.setDescription(updated.getDescription());
@@ -75,7 +80,7 @@ public class TodoItemServiceImpl implements TodoItemService {
         todoItem.setAssignee(null);
         todoItem.setAssignee(updated.getAssignee());
 
-        return converter.todoItemToDto(repository.save(todoItem));
+        return converter.todoItemToDto(todoItemRepository.save(todoItem));
 
     }
 

@@ -1,21 +1,20 @@
 package se.lexicon.todoitspring.dto;
 
-import se.lexicon.todoitspring.entity.AppUser;
 import java.time.LocalDateTime;
 
-public class TodoItemDto {
+public class TodoItemForm {
 
     private String id;
     private String title;
     private String description;
     private LocalDateTime deadline;
     private boolean done;
-    private AppUser assignee;
+    private String assignee;
 
-    public TodoItemDto() {
+    public TodoItemForm() {
     }
 
-    public TodoItemDto(String id, String title, String description, LocalDateTime deadline, boolean done, AppUser assignee) {
+    public TodoItemForm(String id, String title, String description, LocalDateTime deadline, boolean done, String assignee) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -64,11 +63,11 @@ public class TodoItemDto {
         this.done = done;
     }
 
-    public AppUser getAssignee() {
+    public String getAssignee() {
         return assignee;
     }
 
-    public void setAssignee(AppUser assignee) {
+    public void setAssignee(String assignee) {
         this.assignee = assignee;
     }
 }
